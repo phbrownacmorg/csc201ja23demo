@@ -3,6 +3,7 @@
 def main(args: list[str]) -> int:
     # Read input
     # Initial amount invested (principal)
+    # This is the accumulator variable
     P: float = float(input('Please input the amount to invest: $'))
     # Interest rate *per compounding period*
     rate: float = float(input('Please input the interest rate, in percent: '))
@@ -21,6 +22,7 @@ def main(args: list[str]) -> int:
     # Convert rate from a percentage to a straight quantity
     rate = rate/100
     # Calculate and print the rest of the rows
+    # Loop (for the accumulator pattern)
     for i in range(periods):
         # Print the period column
         print(i+1, end='\t')
@@ -31,6 +33,8 @@ def main(args: list[str]) -> int:
         print('$' + str(round(interest, 2)), end='\t\t')
 
         # Add on the interest
+        # (or, accumulate a little more of the answer into
+        #  the accumulator variable)
         P = P + interest
         # Print the new principal
         print('$' + str(round(P, 2)), end='')
