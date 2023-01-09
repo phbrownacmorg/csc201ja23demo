@@ -16,7 +16,14 @@ def main(args: list[str]) -> int:
 
     # Convert rate from a percentage to a straight quantity
     rate = rate/100
-    max_P: float = P * (1 + rate)**periods
+    amounts: list[float] = [P]
+    for i in range(periods):
+        interest: float = P * rate
+        P = P + interest
+        amounts.append(round(P, 2))
+    print(amounts)
+
+    max_P: float = max(amounts)
     print('Maximum principal is $' + str(round(P, 2)))
 
     margin: float = 0.1
@@ -26,11 +33,11 @@ def main(args: list[str]) -> int:
 
     # Set the coordinates the match the problem.
     # Effectively, bar_width == 1 and height_per_dollar = 1
-    win.setCoords(-margin * (periods+1), -margin * max_P, 
-                (periods + 1)/(1 - margin), max_P / (1 - margin))
+    win.setCoords(-margin * (len(amounts)), -margin * max_P, 
+                len(amounts)/(1 - margin), max_P / (1 - margin))
     
     origin: Point = Point(0, 0)
-    end: Point = Point((periods + 1) * (1 + (margin/2)), 0)
+    end: Point = Point(len(amounts) * (1 + (margin/2)), 0)
     x_axis: Line = Line(origin, end)
     x_axis.setArrow('last')
     x_axis.draw(win)
@@ -41,13 +48,10 @@ def main(args: list[str]) -> int:
     y_axis.draw(win)
 
     # Bars
-    for i in range(periods+1):
-        bar: Rectangle = Rectangle(Point(i, 0), Point(i+1, P))
+    for i in range(len(amounts)):
+        bar: Rectangle = Rectangle(Point(i, 0), Point(i+1, amounts[i]))
         bar.setFill('green')
         bar.draw(win)
-
-        interest: float = P * rate
-        P = P + interest
 
     # Close the window when clicked on
     win.getMouse() # Wait for a mouse click
