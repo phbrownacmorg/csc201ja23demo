@@ -26,11 +26,6 @@ def main(args: list[str]) -> int:
     id = (id + lastname).lower() + '001'
     print(id)
 
-
-    # firstname = nameparts[0]
-    # middlename = nameparts[1]
-    # print(firstname, middlename, lastname)
-
     return 0 # Conventional return value for completing successfully
 
 if __name__ == '__main__':
