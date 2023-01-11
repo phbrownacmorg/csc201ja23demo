@@ -16,7 +16,7 @@ def main(args: list[str]) -> int:
     # 5 is an arbitrary number of mouse clicks to collect
     for i in range(5):
         click: Point = win.getMouse()
-        label.setText('Mouse click: ' + str(click))
+        label.setText('Mouse click: Point({0:0.3f}, {1:0.3f})'.format(click.getX(), click.getY()))
 
         mousePos: Point = mouse.getCenter()
         mouse.move(click.getX() - mousePos.getX(),

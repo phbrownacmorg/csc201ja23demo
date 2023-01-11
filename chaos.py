@@ -13,12 +13,14 @@ def main(args: list[str]) -> int:
     x = min(x, 1 - EPSILON) # Handles x too big
     x = max(x, 0 + EPSILON) # Handles x too small
 
+    print(' i\t    x')
+    print('-' * 20)
     # Loop
     for i in range(10): # type: int
         # Each time through the loop, the accumulator variable
         # is modified to include the next piece of answer.
         x = 3.9 * x * (1 - x)
-        print(x)
+        print('{0:>3d}\t{1:0.6f}'.format(i+1,x))
     return 0  # Conventional return value for successful completion
 
 if __name__ == '__main__':

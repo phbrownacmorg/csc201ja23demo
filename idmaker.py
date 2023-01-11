@@ -16,7 +16,7 @@ def main(args: list[str]) -> int:
     print(lastname, givennames)
 
     # Clean up the last name
-    badchars: str = " '"  # No biscuit.  This string can be expanded as additional bad characters are encountered.
+    badchars: str = " '.,"  # No biscuit.  This string can be expanded as additional bad characters are encountered.
     for c in badchars:
         lastname = lastname.replace(c, '')
 
