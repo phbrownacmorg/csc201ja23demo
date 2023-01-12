@@ -2,6 +2,8 @@
 # last names from another CSV file, and create a
 # third CSV file with names.
 
+import random
+
 def main(args: list[str]) -> int:
     first_names_filename: str = 'first-names.csv'
     last_names_filename: str = 'last-names.csv'
@@ -44,14 +46,35 @@ def main(args: list[str]) -> int:
     # for i in range(len(last_names)):
     #     print(i, last_names[i], last_name_prop100k[i])
 
-    n: int = int(input('How many names should be generated?'))
+    n: int = int(input('How many names should be generated? '))
 
     with open(output_filename, 'w') as f:
         # write the column headers
-        f.write('id,firstname,middlename,lastname\n')
-        for i in range(n):
-            pass
+        f.write('id,lastname,firstname,middlename\n')
+        for j in range(n):
+            # Construct a name
+            # first name
+            r: float = random.random() * first_name_pct[-1]
+            i = 0
+            while r > first_name_pct[i]:
+                i = i + 1
+            firstname: str = first_names[i].capitalize()
 
+            # middle name
+            r = random.random() * first_name_pct[-1]
+            i = 0
+            while r > first_name_pct[i]:
+                i = i + 1
+            middlename: str = first_names[i].capitalize()
+
+            # last name
+            r = random.random() * last_name_prop100k[-1]
+            i = 0
+            while r > last_name_prop100k[i]:
+                i = i + 1
+            lastname: str = last_names[i].capitalize()
+
+            f.write('{0},{1},{2},{3}\n'.format(j,lastname,firstname,middlename))
 
 
     return 0 # Conventional return value for completing successfully
