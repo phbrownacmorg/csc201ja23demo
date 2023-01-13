@@ -75,7 +75,7 @@ def main(args: list[str]) -> int:
         right: Point = Point(0, i * tick_spacing)
         left: Point = Point(-margin/10 * len(amounts), 
                             i * tick_spacing) 
-        tick: Line = Line(left, right)
+        tick = Line(left, right)
         tick.draw(win)
 
         # Y-axis label
