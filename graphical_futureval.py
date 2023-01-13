@@ -24,7 +24,7 @@ def find_amounts(P: float, rate: float, periods: int) -> list[float]:
 
 def find_tick_spacing(max_value: float) -> int:
     #### Find the spacing for the tick marks so there aren't *too* many of them
-    MAX_TICKS = 30
+    MAX_TICKS = 20
     spacing = 1
     while (max_value / spacing) > MAX_TICKS:
         spacing = spacing * 10
@@ -35,7 +35,8 @@ def draw_line(start: Point, end: Point, w: GraphWin) -> Line:
     line.draw(w)
     return line
 
-def draw_axis(direction: Point, max_x: float, max_y: float, margin: float, win: GraphWin) -> None:
+def draw_axis(direction: Point, max_x: float, max_y: float, margin: float, win: GraphWin,
+                decoration: str = '') -> None:
     # Draw an axis, with tick marks and labels.  Only works for axes
     # in the positive direction. 
 
@@ -54,18 +55,29 @@ def draw_axis(direction: Point, max_x: float, max_y: float, margin: float, win: 
     tick_spacing: float = find_tick_spacing(axis_length)
     # Using math.ceil so the tick marks go all the way to the end of the axis
     for i in range(math.ceil(axis_length / tick_spacing)):
-        tick_length: float = max((-margin/10) * max_x * dir_y,
-                                (-margin/10) * max_y * dir_x)
+        tick_length: float = max((margin/10) * max_x * dir_y,
+                                (margin/10) * max_y * dir_x)
         axis_pos: float = i * tick_spacing + 0.5
+
+        # Tick marks
         inside: Point = Point(axis_pos * dir_x, axis_pos * dir_y)
-        outside: Point = Point(axis_pos * dir_x + tick_length * dir_y,
-                                axis_pos * dir_y + tick_length * dir_x)
+        outside: Point = Point(axis_pos * dir_x + -tick_length * dir_y,
+                                axis_pos * dir_y + -tick_length * dir_x)
         draw_line(inside, outside, win)
+
+        # Axis labels
+        # Offset from axis is different in X and Y because we write horizontally
+        anchor: Point = Point(axis_pos * dir_x + -tick_length * 5 * dir_y,
+                                axis_pos * dir_y + -tick_length * 3 * dir_x)
+        text: str = decoration + str(int(axis_pos))
+        label: Text = Text(anchor, text)
+        label.draw(win)
 
 
 def show_on_graph(amounts: list[float]) -> None:     
-    max_P: float = max(amounts)
-    print('Maximum principal is $' + str(round(max_P, 2)))
+    max_x: float = len(amounts)
+    max_y: float = max(amounts)
+    print('Maximum principal is $' + str(round(max_y, 2)))
 
     margin: float = 0.1
 
@@ -74,61 +86,26 @@ def show_on_graph(amounts: list[float]) -> None:
 
     # Set the coordinates the match the problem.
     # Effectively, bar_width == 1 and height_per_dollar = 1
-    win.setCoords(-margin * (len(amounts)), -margin * max_P, 
-                len(amounts)/(1 - margin), max_P / (1 - margin))
+    win.setCoords(-margin * (max_x), -margin * max_y, 
+                max_x/(1 - margin), max_y / (1 - margin))
     
     origin: Point = Point(0, 0)
 
     # Axis labels
     ## X axis
-    direction: Point = Point(1, 0)
-    draw_axis(direction, len(amounts), max_P, margin, win)
-
-    # tick_spacing: int = find_tick_spacing(len(amounts))
-
-    # Using math.ceil so the tick marks go all the way to the end of the axis
-    # for i in range(math.ceil(len(amounts)/ tick_spacing)):
-    #     top: Point = Point(i * tick_spacing + 0.5, 0)
-    #     bottom: Point = Point(i * tick_spacing + 0.5, 
-    #                             -margin/10 * max_P)
-    #     draw_line(top, bottom, win)
-
-    end = Point(0, max_P * (1 + margin/2))
-    axis = draw_line(origin, end, win)
-    axis.setArrow('last')
-
-    # Axis labels
+    draw_axis(Point(1, 0), max_x, max_y, margin, win)
     ## Y axis
-    ### Tick marks
-    tick_spacing = find_tick_spacing(max_P)
-
-    # Using math.ceil so the tick marks go all the way to the end of the axis
-    for i in range(math.ceil(max_P / tick_spacing)):
-        right: Point = Point(0, i * tick_spacing)
-        left: Point = Point(-margin/10 * len(amounts), 
-                            i * tick_spacing) 
-        draw_line(right, left, win)
-
-        # Y-axis label
-        label:Text = Text(Point((-margin/2) * len(amounts), i * tick_spacing), 
-                        '$' + str(i * tick_spacing))
-        label.draw(win)
-
-
+    draw_axis(Point(0, 1), max_x, max_y, margin, win, '$')
 
     # Bars
-    for i in range(len(amounts)):
+    for i in range(max_x):
         # Draw bars
         bar: Rectangle = Rectangle(Point(i, 0), Point(i+1, amounts[i]))
         bar.setFill('green')
         bar.draw(win)
 
-        # Period labels
-        label = Text(Point(i+0.5, -margin/4 * max_P), str(i))
-        label.draw(win)
-
         # Amount labels
-        label = Text(Point(i+0.5, (margin/5 * max_P) + amounts[i]),
+        label = Text(Point(i+0.5, (margin/5 * max_y) + amounts[i]),
                         '$' + str(amounts[i]))
         label.setSize(6)
         label.draw(win)
