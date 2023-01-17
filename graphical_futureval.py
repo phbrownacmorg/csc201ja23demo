@@ -73,6 +73,19 @@ def draw_axis(direction: Point, max_x: float, max_y: float, margin: float, win: 
         label: Text = Text(anchor, text)
         label.draw(win)
 
+def draw_bars(amounts: list[float], margin: float, win: GraphWin) -> None:
+    max_y: float = max(amounts)
+    for i in range(len(amounts)):
+        # Draw bars
+        bar: Rectangle = Rectangle(Point(i, 0), Point(i+1, amounts[i]))
+        bar.setFill('green')
+        bar.draw(win)
+
+        # Amount labels
+        label = Text(Point(i+0.5, (margin/5 * max_y) + amounts[i]),
+                        '${0:.2f}'.format(amounts[i]))
+        label.setSize(8) # Specific to the window size
+        label.draw(win)
 
 def show_on_graph(amounts: list[float]) -> None:     
     max_x: float = len(amounts)
@@ -97,20 +110,8 @@ def show_on_graph(amounts: list[float]) -> None:
     ## Y axis
     draw_axis(Point(0, 1), max_x, max_y, margin, win, '$')
 
-    # Bars
-    for i in range(max_x):
-        # Draw bars
-        bar: Rectangle = Rectangle(Point(i, 0), Point(i+1, amounts[i]))
-        bar.setFill('green')
-        bar.draw(win)
-
-        # Amount labels
-        label = Text(Point(i+0.5, (margin/5 * max_y) + amounts[i]),
-                        '$' + str(amounts[i]))
-        label.setSize(6)
-        label.draw(win)
+    draw_bars(amounts, margin, win)
         
-
     # Close the window when clicked on
     win.getMouse() # Wait for a mouse click
     win.close()
