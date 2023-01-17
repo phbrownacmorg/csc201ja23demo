@@ -3,6 +3,12 @@ from graphics import *
 import math
 from typing import cast
 
+def makeHead(r: float, color: str) -> Circle:
+    head: Circle = Circle(Point(0, 0), r)
+    head.setFill(color)
+    head.setOutline(color)
+    return head
+
 def makeMouseEar(x_sign: int, r: float, color: str) -> GraphicsObject:
     angle: float = 55 # angle from horizontal in degrees
     scale: float = 1.3
@@ -23,6 +29,15 @@ def makeEye(x_sign: int, r: float, color: str) -> GraphicsObject:
     eye: Oval = Oval(topPt, bottomPt)
     eye.setFill(color)
     return eye
+
+def makeNose(r: float) -> GraphicsObject:
+    y_dist: float = r * 0.25
+    bottom: Point = Point(0, -y_dist)
+    left: Point = Point(-y_dist * 0.5, 0)
+    right: Point = Point(y_dist * 0.5, 0)
+    nose: Polygon = Polygon(bottom, left, right)
+    nose.setFill('black')
+    return nose
 
 def makeMouthLine(x_sign: int, r: float) -> Line:
     angle: float = 20 # Angle below vertical in degrees
@@ -48,17 +63,17 @@ def makeWhisker(x_sign: int, y_val: int, r: float) -> Line:
 
 def makeCatEar(x_sign: int, r: float, color: str) -> GraphicsObject:
     centralAngle: float = 55 # angle from horizontal in degrees
-    widthAngle: float = 10
-    outer_scale: float = 1.3
+    widthAngle: float = 20
+    outer_scale: float = 1.5
 
     x = x_sign * outer_scale * r * math.cos(math.radians(centralAngle))
     y = outer_scale * r * math.sin(math.radians(centralAngle))
     tip: Point = Point(x, y)
     x = x_sign * r * math.cos(math.radians(centralAngle + widthAngle))
-    y = r * math.cos(math.radians(centralAngle + widthAngle))
+    y = r * math.sin(math.radians(centralAngle + widthAngle))
     base1: Point = Point(x, y)
     x = x_sign * r * math.cos(math.radians(centralAngle - widthAngle))
-    y = r * math.cos(math.radians(centralAngle - widthAngle))
+    y = r * math.sin(math.radians(centralAngle - widthAngle))
     base2: Point = Point(x, y)
     ear: Polygon = Polygon(tip, base1, base2)
     ear.setFill(color)
@@ -70,9 +85,7 @@ def makeCatEar(x_sign: int, r: float, color: str) -> GraphicsObject:
 def makeMouse(r: float) -> list[GraphicsObject]:
     color: str = 'gray30'
     animal: list[GraphicsObject] = []
-    head: Circle = Circle(Point(0, 0), r)
-    head.setFill(color)
-    animal.append(head)
+    animal.append(makeHead(r, color))
 
     # Make ears
     for x_sign in [-1, 1]:
@@ -83,9 +96,9 @@ def makeMouse(r: float) -> list[GraphicsObject]:
         animal.append(makeEye(x_sign, r, 'black'))
 
     # Nose
-    nose = Circle(Point(0, 0), r * 0.1)
-    nose.setFill('black')
-    animal.append(nose)
+    #nose = Circle(Point(0, 0), r * 0.1)
+    #nose.setFill('black')
+    animal.append(makeNose(r))
 
     # Mouth
     for x_sign in [-1, 1]:
@@ -100,9 +113,7 @@ def makeMouse(r: float) -> list[GraphicsObject]:
 def makeCat(r: float) -> list[GraphicsObject]:
     cat: list[GraphicsObject] = []
     color: str = 'orange'
-    head: Circle = Circle(Point(0, 0), r)
-    head.setFill(color)
-    cat.append(head)
+    cat.append(makeHead(r, color))
 
     for x_sign in [-1, 1]:
         cat.append(makeCatEar(x_sign, r, color))
