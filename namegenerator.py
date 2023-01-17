@@ -4,78 +4,70 @@
 
 import random
 
+def read_file(fname: str) -> tuple[list[str], list[float]]:
+    names: list[str] = []
+    probs: list[float] = []
+    with open(fname, 'r') as f:
+        for line in f.readlines()[1:]:
+            parts: list[str] = line.split(',')
+            names.append(parts[1])
+            probs.append(float(parts[0]))
+    return names, probs
+
+def read_names(fname: str) -> tuple[list[str], list[float]]:
+    names, probs = read_file(fname)
+
+    # pull the probabilities forward one slot
+    for i in range(len(probs) - 1):
+        probs[i] = probs[i+1]
+    # delete the unmatched pair at the end
+    del names[-1]
+    del probs[-1]
+
+    return names, probs
+
+def pick_name(names: list[str], probs: list[float]) -> str:
+    p: float = random.random() * probs[-1]
+    i = 0
+    while probs[i] < p:
+        i = i + 1
+    return names[i].capitalize()
+
+def make_names(n: int, first_names: list[str], first_name_pct: list[float],
+                    last_names: list[str], last_name_prop100k: list[float]) \
+                        -> list[tuple[str, str, str]]:
+    namelist: list[tuple[str, str, str]] = []
+    for i in range(n):
+        firstname: str = pick_name(first_names, first_name_pct)
+        middlename: str = pick_name(first_names, first_name_pct)
+        lastname: str = pick_name(last_names, last_name_prop100k)
+        namelist.append((lastname, firstname, middlename))
+    return namelist
+
+def write_names(names: list[tuple[str, str, str]], fname: str) -> None:
+    with open(fname, 'w') as f:
+        # Write the header row
+        f.write('id,lastname,firstname,middlename\n')
+        # Write the names
+        for i in range(len(names)):
+            f.write(str(i))
+            for j in range(3):
+                f.write(',' + names[i][j])
+            f.write('\n')
+
 def main(args: list[str]) -> int:
     first_names_filename: str = 'first-names.csv'
     last_names_filename: str = 'last-names.csv'
     output_filename: str = 'names.csv'
 
-    first_names: list[str] = []
-    first_name_pct: list[float] = []
-    last_names: list[str] = []
-    last_name_prop100k: list[float] = []
-
-    with open(first_names_filename, 'r') as f:
-        for line in f.readlines()[1:]:
-            parts: list[str] = line.split(',')
-            first_names.append(parts[1])
-            first_name_pct.append(float(parts[0]))
-
-    # shove the percentages down one slot
-    for i in range(len(first_name_pct)-1):
-        first_name_pct[i] = first_name_pct[i+1]
-    # delete the unmatched pair at the end
-    del first_names[-1]
-    del first_name_pct[-1]
-
-    # for i in range(len(first_names)):
-    #     print(first_names[i], first_name_pct[i])
-
-    with open(last_names_filename, 'r') as f:
-        for line in f.readlines()[1:]:
-            parts = line.split(',')
-            last_names.append(parts[1])
-            last_name_prop100k.append(float(parts[0]))
-
-    # shove the percentages down one slot
-    for i in range(len(last_name_prop100k)-1):
-        last_name_prop100k[i] = last_name_prop100k[i+1]
-    # delete the unmatched pair at the end
-    del last_names[-1]
-    del last_name_prop100k[-1]
-
-    # for i in range(len(last_names)):
-    #     print(i, last_names[i], last_name_prop100k[i])
+    first_names, first_name_pct = read_names(first_names_filename)
+    last_names, last_name_prop100k = read_names(last_names_filename)
 
     n: int = int(input('How many names should be generated? '))
 
-    with open(output_filename, 'w') as f:
-        # write the column headers
-        f.write('id,lastname,firstname,middlename\n')
-        for j in range(n):
-            # Construct a name
-            # first name
-            r: float = random.random() * first_name_pct[-1]
-            i = 0
-            while r > first_name_pct[i]:
-                i = i + 1
-            firstname: str = first_names[i].capitalize()
-
-            # middle name
-            r = random.random() * first_name_pct[-1]
-            i = 0
-            while r > first_name_pct[i]:
-                i = i + 1
-            middlename: str = first_names[i].capitalize()
-
-            # last name
-            r = random.random() * last_name_prop100k[-1]
-            i = 0
-            while r > last_name_prop100k[i]:
-                i = i + 1
-            lastname: str = last_names[i].capitalize()
-
-            f.write('{0},{1},{2},{3}\n'.format(j,lastname,firstname,middlename))
-
+    names: list[tuple[str, str, str]] = make_names(n, first_names, first_name_pct,
+                                                    last_names, last_name_prop100k)
+    write_names(names, output_filename)
 
     return 0 # Conventional return value for completing successfully
 

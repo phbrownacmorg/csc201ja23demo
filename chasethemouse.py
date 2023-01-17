@@ -118,6 +118,17 @@ def makeCat(r: float) -> list[GraphicsObject]:
     for x_sign in [-1, 1]:
         cat.append(makeCatEar(x_sign, r, color))
 
+    for x_sign in [-1, 1]:
+        cat.append(makeEye(x_sign, r, 'green'))
+
+    cat.append(makeNose(r))
+    for x_sign in [-1, 1]:
+        cat.append(makeMouthLine(x_sign, r))
+
+    for x_sign in [-1, 1]:
+        for y_val in [-1, 0, 1]:
+            cat.append(makeWhisker(x_sign, y_val, r))
+
     return cat
 
 def drawAnimal(animal: list[GraphicsObject], win: GraphWin) -> None:

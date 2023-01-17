@@ -116,6 +116,19 @@ def show_on_graph(amounts: list[float]) -> None:
     win.getMouse() # Wait for a mouse click
     win.close()
 
+def print_table(amounts: list[float]) -> None:
+    # Column headers
+    print('{0:^7}\t\t{1:>10}'.format('Period', 'Amount'))
+    print('-' * 27)
+
+    # Print the initial amount
+    print('{0:^7}\t\t${1:>10.2f}'.format('Initial', amounts[0]))
+
+    # Print the rest
+    for i in range(1, len(amounts)):
+        print('{0:^7d}\t\t${1:>10.2f}'.format(i, amounts[i]))
+
+
 def main(args: list[str]) -> int:
     # Read input
     P, rate, periods = read_params()
@@ -126,6 +139,7 @@ def main(args: list[str]) -> int:
     amounts: list[float] = find_amounts(P, rate, periods)
 
     show_on_graph(amounts)
+    print_table(amounts)
 
     return 0 # Conventional return value for completing successfully
 
