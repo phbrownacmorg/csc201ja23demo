@@ -17,18 +17,21 @@ def find_roots(a: float, b: float, c: float) -> tuple[float, float]:
     # Find the roots
 
     det: float = find_determinant(a, b, c)
-    # Take the square root of the determinant
-    # (Yes, this may crash if the determinant is negative.
-    #  We'll see how to avoid that later in the course.)
-    detroot: float = math.sqrt(det)
+    if det < 0:
+        return math.nan, math.nan
+    else: # For clarity.  Not *strictly* necessary, because of the "return" on 21.
+        # Take the square root of the determinant
+        # (Yes, this may crash if the determinant is negative.
+        #  We'll see how to avoid that later in the course.)
+        detroot: float = math.sqrt(det)
 
-    # Test that
-    #print(detroot)
+        # Test that
+        #print(detroot)
 
-    # Find the roots
-    root1: float = (-b + detroot)/(2*a)
-    root2: float = (-b - detroot)/(2*a)
-    return root1, root2
+        # Find the roots
+        root1: float = (-b + detroot)/(2*a)
+        root2: float = (-b - detroot)/(2*a)
+        return root1, root2
 
 def main(args: list[str]) -> int:
     # Input
@@ -38,8 +41,11 @@ def main(args: list[str]) -> int:
     # Find the roots (Processing)
     root1, root2 = find_roots(a, b, c)
 
-    # Output
-    print('The roots are:', root1, root2)
+    if math.isnan(root1):
+        print('The system has no real roots.')
+    else:
+        # Output
+        print('The roots are:', root1, root2)
 
     return 0 # Conventional return value for completing successfully
 
