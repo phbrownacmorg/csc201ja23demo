@@ -1,4 +1,5 @@
 # Program to do nothing, correctly.
+# SSN format from https://en.wikipedia.org/wiki/Social_Security_number
 
 def validSSN(ssn: str) -> bool:
     valid: bool = True
