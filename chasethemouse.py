@@ -2,6 +2,7 @@
 from graphics import *
 import math
 from typing import cast
+from quit_button import makeButton, inButton
 
 def makeHead(r: float, color: str) -> Circle:
     head: Circle = Circle(Point(0, 0), r)
@@ -147,6 +148,8 @@ def main(args: list[str]) -> int:
     win: GraphWin = GraphWin('Graphics window', 800, 800)
     win.setCoords(-1, -1, 1, 1)
 
+    quitButton: Rectangle = makeButton(Point(-1, 1), Point(-.9, .9), 'Quit', win)
+
     mouse: list[GraphicsObject] = makeMouse(0.05)
     drawAnimal(mouse, win)
 
@@ -157,9 +160,9 @@ def main(args: list[str]) -> int:
     label: Text = Text(Point(0, 0.9), 'Mouse click: (none)')
     label.draw(win)
 
+    click: Point = cast(Point, win.getMouse())
     # 5 is an arbitrary number of mouse clicks to collect
-    for i in range(5):
-        click: Point = cast(Point, win.getMouse())
+    while not inButton(quitButton, click):        
         label.setText('Mouse click: Point({0:0.3f}, {1:0.3f})'.format(click.getX(), click.getY()))
 
         # Mouse jumps to the click
@@ -171,9 +174,10 @@ def main(args: list[str]) -> int:
         catPos: Point = animalCenter(cat)
         moveAnimal(cat, mousePos.getX() - catPos.getX(),
                     mousePos.getY() - catPos.getY())
+        click = cast(Point, win.getMouse())
 
     # Close the window when clicked on
-    win.getMouse() # Wait for a mouse click
+    #win.getMouse() # Wait for a mouse click
     win.close()
 
     return 0 # Conventional return value for completing successfully

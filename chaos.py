@@ -36,12 +36,20 @@ def main(args: list[str]) -> int:
                         outfile.write('\n')
                         outfile.write(' i\t    x\n')
                         outfile.write('-' * 20 + '\n')
-                        # Loop
-                        for i in range(n): # i is an int
+                        # Loop (definite)
+                        # for i in range(n): # i is an int
+                        # Indefinite-loop equivalent
+                        i: int = 0
+                        while i < n:
                             # Each time through the loop, the accumulator variable
                             # is modified to include the next piece of answer.
                             x = 3.9 * x * (1 - x)
                             outfile.write('{0:>3d}\t{1:0.6f}\n'.format(i+1,x))
+                        
+                            # For indefinite loop.
+                            # Forget this (easy to do!), and you have an infinite loop.
+                            i = i + 1
+
     except FileNotFoundError: # input file couldn't be found
         print('File "' + filename +'" could not be found.  Did you mistype the filename?')
     except IOError as e: # General I/O errors when reading or writing the files
