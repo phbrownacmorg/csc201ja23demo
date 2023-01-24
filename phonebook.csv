@@ -1,6 +1,6 @@
-name,phone
-Boone Hopkins,864.596.9050
-Peter Brown,864.596.9156
-Jessica Sorrells,864.596.9149
-Joseph Barrera,864.596.9128
-Amanda Mangum,864.596.596.9127
+name,phone,address,email,employer,title,lastchanged,accesses
+Boone Hopkins,864.596.9050,580 E. Main St. Spartanburg SC 29302,boone.hopkins@converse.edu,Converse University,President,2023-01-24,
+Peter Brown,864.596.9156,580 E. Main St. Spartanburg SC 29302,peter.brown@converse.edu,Converse University,Assitant Professor of Computer Science and Director of Distance Education,2023-01-24,
+Jessica Sorrells,864.596.9149,580 E. Main St. Spartanburg SC 29302,jessica.sorrells@converse.edu,Converse University,Associate Professor of Mathematics,2023-01-24,
+Joe Barrera,864.596.9128,580 E. Main St. Spartanburg SC 29302,joseph.barrera@converse.edu,Converse University,Assistant Professor of Mathematics,2023-01-24,
+Amanda Mangum,864.596.9127,580 E. Main St. Spartanburg SC 29302,amanda.mangum@converse.edu,Converse University,Assistant Professor of Mathematics,2023-01-24,
