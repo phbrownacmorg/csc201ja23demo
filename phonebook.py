@@ -55,7 +55,7 @@ def print_entry(phonebook: dict[str, Any], name: str) -> None:
             print('\t{0:11}\t{1}'.format(field + ':', entry.get(field, '')))
 
 def entry_phone(entry: tuple[str, dict[str, Any]]) -> str:
-    return entry[1]['phone'] # Phone number
+    return cast(str, entry[1]['phone']) # Phone number
 
 def entry_last_name(entry: tuple[str, dict[str, Any]]) -> str:
     name: str = entry[0]
