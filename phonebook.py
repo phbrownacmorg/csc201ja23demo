@@ -54,6 +54,21 @@ def print_entry(phonebook: dict[str, Any], name: str) -> None:
         for field in entry.keys():
             print('\t{0:11}\t{1}'.format(field + ':', entry.get(field, '')))
 
+def entry_phone(entry: tuple[str, dict[str, Any]]) -> str:
+    return entry[1]['phone'] # Phone number
+
+def entry_last_name(entry: tuple[str, dict[str, Any]]) -> str:
+    name: str = entry[0]
+    # Extract last name
+    parts: list[str] = name.split()
+    return parts[-1]
+
+def sort_and_print(phonebook: dict[str, dict[str, Any]]) -> None:
+    entries: list[tuple[str, dict[str, Any]]] = list(phonebook.items())
+    entries.sort(key=entry_last_name, reverse=True) # Only time you refer to a function without parentheses
+    for entry in entries:
+        print_entry(phonebook, entry[0])
+
 def main(args: list[str]) -> int:
     phonebook: dict[str, dict[str, Any]] = read_phonebook('phonebook.csv')
     #print(phonebook)
@@ -62,6 +77,8 @@ def main(args: list[str]) -> int:
     while name != '':
         print_entry(phonebook, name)
         name = input('Please enter a name to look up, or hit Enter to quit: ')
+
+    sort_and_print(phonebook)
 
     return 0 # Conventional return value for completing successfully
 
