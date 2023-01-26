@@ -161,8 +161,10 @@ def main(args: list[str]) -> int:
     label.draw(win)
 
     click: Point = cast(Point, win.getMouse())
-    # 5 is an arbitrary number of mouse clicks to collect
-    while not inButton(quitButton, click):        
+    dist: float = 4 # More than the largest dimension of the screen
+
+    while (not inButton(quitButton, click)) and \
+        (dist > cat[0].getRadius()):        
         label.setText('Mouse click: Point({0:0.3f}, {1:0.3f})'.format(click.getX(), click.getY()))
 
         # Mouse jumps to the click
@@ -174,6 +176,10 @@ def main(args: list[str]) -> int:
         catPos: Point = animalCenter(cat)
         moveAnimal(cat, mousePos.getX() - catPos.getX(),
                     mousePos.getY() - catPos.getY())
+
+        # Update dist
+        dist = math.dist((mousePos.getX(), mousePos.getY()),
+                            (catPos.getX(), catPos.getY()))
         click = cast(Point, win.getMouse())
 
     # Close the window when clicked on
